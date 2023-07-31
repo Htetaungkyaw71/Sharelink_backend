@@ -15,6 +15,37 @@ export const createNewUser = async (req,res) => {
 
 }
 
+export const updateUser = async (req,res) => {
+    const updatedUser = await prisma.user.update({
+        where:{
+            id:req.params.id
+        },
+        data:{
+            name:req.body.name,
+            email:req.body.email
+        }
+    })
+    res.json({data:updatedUser})
+}
+
+export const getUser = async (req,res) => {
+    const user = await prisma.user.findUnique({
+        where:{
+            id:req.params.id
+        }
+    })
+    res.json({data:user})
+}
+
+export const deleteUser = async (req,res) => {
+    const deleteduser = await prisma.user.delete({
+        where:{
+            id:req.params.id
+        }
+    })
+    res.json({data:deleteduser})
+}
+
 
 export const signin = async (req,res)=>{
     const user = await prisma.user.findUnique({

@@ -27,5 +27,6 @@ model Link {
   url      String
 
   belongToId String
-  belongTo   User   @relation(fields: [belongToId], references: [id])
+  belongTo   User   @relation(fields: [belongToId], references: [id], onDelete: Cascade)
+  @@unique([id,belongToId])
 }

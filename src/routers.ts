@@ -1,19 +1,37 @@
 import {Router} from "express";
+import {body} from "express-validator"
+import { validateInput } from "./modules/middleware";
+import { createLink, deleteLink, getAllLinks, updateLink } from "./handlers/link";
+import { deleteUser, getUser, updateUser } from "./handlers/user";
 
 const router = Router()
 
-router.get('/user/:id',(req,res)=>{})
-router.delete('/user/:id',(req,res)=>{})
-router.put('/user/:id',(req,res)=>{})
+router.get('/user/:id',getUser)
+
+router.delete('/user/:id',deleteUser)
+
+router.put('/user/:id', 
+body('name').exists().isString(),
+body('email').exists().isString(),
+validateInput,updateUser)
 
 
-router.get('/links',(req,res)=>{
-    res.status(200)
-    res.json({message:"links"})
-})
-router.post('/links',(req,res)=>{})
-router.put('/links/:id',(req,res)=>{})
+router.get('/links',getAllLinks)
 
-router.get('/preview',(req,res)=>{})
+router.post('/links',
+    body('platform').exists().isString(),
+    body('url').exists().isString(),
+    validateInput,
+    createLink)
+
+router.put('/links/:id',
+    body('platform').exists().isString(),
+    body('url').exists().isString(),
+    validateInput,
+updateLink)
+
+router.delete('/links/:id',deleteLink)
+
+
 
 export default router
