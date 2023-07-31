@@ -15,28 +15,29 @@ export const getAllLinks = async(req,res)=>{
 }
 
 // create link
-export const createLink = async(req,res)=>{
-
-    const user = await prisma.user.findUnique({
-        where:{
-            id:req.user.id
+export const createLink = async(req,res,next)=>{
+    try {
+        const user = await prisma.user.findUnique({
+            where:{
+                id:req.user.id
+            }
+        })
+        if(!user){
+            res.status(400)
+            res.json({messgae:"user is not found"})
         }
-    })
-
-    if(!user){
-        res.status(400)
-        res.json({messgae:"user is not found"})
+        const link = await prisma.link.create({
+            data:{
+                platform:req.body.platform,
+                url:req.body.url,
+                belongToId:user.id
+            }
+        })
+        res.json({data:link})
+    } catch (error) {
+        next(error)
     }
-
-
-    const link = await prisma.link.create({
-        data:{
-            platform:req.body.platform,
-            url:req.body.url,
-            belongToId:user.id
-        }
-    })
-    res.json({data:link})
+   
 }
 
 // update link

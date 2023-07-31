@@ -21,6 +21,16 @@ app.use('/api', protect, router)
 app.post('/user', createNewUser)
 app.post('/signin', signin)
 
+app.use((err,req,res,next)=>{
+    if(err.type === 'auth'){
+        res.status(401).json({message:"unauthorized"})
+    }else if(err.type === 'input'){
+        res.status(400).json({message:"Invalid Input"})
+    }else{
+        res.status(500).json({message:"Ooops there was an error"})
+    }
+})
+
 app.listen(3000,()=>{
     console.log("Server is running on http://localhost:3000")
 })
