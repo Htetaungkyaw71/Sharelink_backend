@@ -12,7 +12,7 @@ export const createNewUser = async (req,res,next) => {
         })
     
         const token = createJWT(user)
-        res.json({token})
+        res.json({token,user})
     } catch (error) {
         error.type = "input"
         next(error)
@@ -60,6 +60,12 @@ export const signin = async (req,res)=>{
         }
     })
 
+    if(!user){
+        res.status(401)
+        res.json({message:"Email is not exists"})
+        return
+    }
+
     const payload = await comparepassword(req.body.password,user.password)
 
     if(!payload){
@@ -69,6 +75,6 @@ export const signin = async (req,res)=>{
     }
 
     const token = createJWT(user)
-    res.json({token})
+    res.json({token,user})
 
 } 
