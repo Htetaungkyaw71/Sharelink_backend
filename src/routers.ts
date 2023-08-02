@@ -1,14 +1,15 @@
 import {Router} from "express";
 import {body} from "express-validator"
 import { validateInput } from "./modules/middleware";
-import { createLink, deleteLink, getAllLinks, updateLink } from "./handlers/link";
-import { deleteUser, getUser, updateUser } from "./handlers/user";
+import { createLink, deleteLink, getAllLinks, getPreview, updateLink } from "./handlers/link";
+
 
 const router = Router()
 
 
 
 router.get('/links',getAllLinks)
+router.get('/preview/:name',getPreview)
 
 router.post('/links',
     body('platform').exists().isString(),

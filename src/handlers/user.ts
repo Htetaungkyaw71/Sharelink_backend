@@ -2,7 +2,18 @@ import prisma from "../../db";
 import { comparepassword, createJWT, hashpassword } from "../modules/auth";
 
 export const createNewUser = async (req,res,next) => {
+
     try {
+        let name = await prisma.user.findFirst({
+            where:{
+                name:req.body.name
+            }
+        })
+        if(name){
+            res.status(400)
+            res.json({message:"Name is already exists"})
+            return
+        }
         let user = await prisma.user.create({
             data:{
                 name:req.body.name,
@@ -21,17 +32,33 @@ export const createNewUser = async (req,res,next) => {
 
 }
 
-export const updateUser = async (req,res) => {
-    const updatedUser = await prisma.user.update({
-        where:{
-            id:req.params.id
-        },
-        data:{
-            name:req.body.name,
-            email:req.body.email
+export const updateUser = async (req,res,next) => {
+    try {
+        let name = await prisma.user.findFirst({
+            where:{
+                name:req.body.name
+            }
+        })
+        if(name){
+            res.status(400)
+            res.json({message:"Name is already exists"})
+            return
         }
-    })
-    res.json({data:updatedUser})
+        const updatedUser = await prisma.user.update({
+            where:{
+                id:req.params.id
+            },
+            data:{
+                name:req.body.name,
+                email:req.body.email
+            }
+        })
+        res.json({data:updatedUser})
+    } catch (error) {
+        error.type = "input"
+        next(error)
+    }
+    
 }
 
 export const getUser = async (req,res) => {
