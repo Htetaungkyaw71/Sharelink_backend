@@ -14,18 +14,6 @@ export const getAllLinks = async(req,res)=>{
     res.json({data:links})
 }
 
-export const getPreview = async(req,res)=>{
-    const user = await prisma.user.findFirst({
-        where:{
-            name:req.params.name,
-        },
-        include:{
-            links:true
-        }
-    })
-    res.json({data:user})
-}
-
 
 // create link
 export const createLink = async(req,res,next)=>{

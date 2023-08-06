@@ -1,6 +1,10 @@
 import prisma from "../../db";
 import { comparepassword, createJWT, hashpassword } from "../modules/auth";
 
+const receiveImage = require('../modules/multerMiddleware');
+const { uploadImage } = require('../modules/cloudinaryUtils')
+
+
 export const createNewUser = async (req,res,next) => {
 
     try {
@@ -32,6 +36,7 @@ export const createNewUser = async (req,res,next) => {
 
 }
 
+
 export const updateUser = async (req,res,next) => {
     try {
         let name = await prisma.user.findFirst({
@@ -44,6 +49,8 @@ export const updateUser = async (req,res,next) => {
             res.json({message:"Name is already exists"})
             return
         }
+       
+
         const updatedUser = await prisma.user.update({
             where:{
                 id:req.params.id
@@ -61,6 +68,36 @@ export const updateUser = async (req,res,next) => {
     
 }
 
+
+export const updateImage = (req,res)=>{
+    receiveImage(req, res, async (err) => {
+        if (err) {
+            return res.json({ error: err.message });
+        }
+        console.log(req.file)
+        try {
+            const imageStream = req.file.buffer;
+            const imageName = new Date().getTime().toString();
+
+            const uploadResult = await uploadImage(imageStream, imageName);
+
+            const uploadedUrl = uploadResult.url;
+            const updatedImg = await prisma.user.update({
+                where:{
+                    id:req.params.id
+                },
+                data:{
+                    img_url:uploadedUrl
+                }
+            })
+            res.json({data:updatedImg})
+        } catch (error) {
+            return res.json({ error: 'Failed to upload' });
+        }
+    })
+}
+
+
 export const getUser = async (req,res) => {
     const user = await prisma.user.findUnique({
         where:{
@@ -69,6 +106,20 @@ export const getUser = async (req,res) => {
     })
     res.json({data:user})
 }
+
+
+export const getPreview = async(req,res)=>{
+    const user = await prisma.user.findFirst({
+        where:{
+            name:req.params.name,
+        },
+        include:{
+            links:true
+        }
+    })
+    res.json({data:user})
+}
+
 
 export const deleteUser = async (req,res) => {
     const deleteduser = await prisma.user.delete({

@@ -16,6 +16,7 @@ model User {
   name      String   @unique
   email     String   @unique
   password  String
+  img_url   String   @default("https://raw.githubusercontent.com/Htetaungkyaw71/Friends/main/static/images/default.png")
   links      Link[]
 }
 

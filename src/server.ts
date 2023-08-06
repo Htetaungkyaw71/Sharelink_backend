@@ -3,10 +3,11 @@ import router from "./routers"
 import morgan from "morgan"
 import * as dotenv from "dotenv"
 import { protect } from "./modules/auth"
-import { createNewUser, deleteUser, getUser, signin, updateUser } from "./handlers/user"
+import { createNewUser, deleteUser, getPreview, getUser, signin, updateUser,updateImage } from "./handlers/user"
 import cors from "cors"
 import { validateInput } from "./modules/middleware"
 import { body } from "express-validator"
+
 
 dotenv.config()
 const app = express()
@@ -19,7 +20,9 @@ app.use(cors())
 app.use('/api', protect, router)
 app.post('/user', createNewUser)
 app.post('/signin', signin)
+app.get('/preview/:name',getPreview)
 app.get('/user/:id',getUser)
+app.put('/user/image/:id', updateImage)
 
 app.delete('/user/:id',deleteUser)
 
