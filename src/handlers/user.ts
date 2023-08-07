@@ -70,17 +70,18 @@ export const updateUser = async (req,res,next) => {
 
 
 export const updateImage = (req,res)=>{
+  
     receiveImage(req, res, async (err) => {
         if (err) {
             return res.json({ error: err.message });
         }
-        console.log(req.file)
+
         try {
             const imageStream = req.file.buffer;
             const imageName = new Date().getTime().toString();
-
+    
             const uploadResult = await uploadImage(imageStream, imageName);
-
+    
             const uploadedUrl = uploadResult.url;
             const updatedImg = await prisma.user.update({
                 where:{
@@ -92,9 +93,13 @@ export const updateImage = (req,res)=>{
             })
             res.json({data:updatedImg})
         } catch (error) {
+            console.log("Backend Error:", error)
             return res.json({ error: 'Failed to upload' });
         }
+        
     })
+   
+
 }
 
 

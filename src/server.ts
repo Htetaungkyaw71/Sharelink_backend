@@ -9,12 +9,14 @@ import { validateInput } from "./modules/middleware"
 import { body } from "express-validator"
 
 
+
+
 dotenv.config()
 const app = express()
+app.use(cors())
 app.use(express.json())
 app.use(express.urlencoded({extended:true}))
 app.use(morgan('dev'))
-app.use(cors())
 
 
 app.use('/api', protect, router)
@@ -22,7 +24,7 @@ app.post('/user', createNewUser)
 app.post('/signin', signin)
 app.get('/preview/:name',getPreview)
 app.get('/user/:id',getUser)
-app.put('/user/image/:id', updateImage)
+app.put('/user/image/:id',updateImage)
 
 app.delete('/user/:id',deleteUser)
 
@@ -38,6 +40,7 @@ app.use((err,req,res,next)=>{
     }else if(err.type === 'input'){
         res.status(400).json({message:"Email is already exists"})
     }else{
+        console.log(err)
         res.status(500).json({message:"Ooops there was an error"})
     }
 })
