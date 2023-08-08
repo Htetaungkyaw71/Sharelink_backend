@@ -1,4 +1,4 @@
-import prisma from "../../db";
+import prisma from "../db";
 import { comparepassword, createJWT, hashpassword } from "../modules/auth";
 
 const receiveImage = require('../modules/multerMiddleware');
@@ -70,7 +70,6 @@ export const updateUser = async (req,res,next) => {
 
 
 export const updateImage = (req,res)=>{
-  
     receiveImage(req, res, async (err) => {
         if (err) {
             return res.json({ error: err.message });

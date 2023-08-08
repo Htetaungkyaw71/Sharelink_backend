@@ -1,5 +1,5 @@
-import prisma from "../../db";
 
+import prisma from "../db";
 
 // get All
 export const getAllLinks = async(req,res)=>{
