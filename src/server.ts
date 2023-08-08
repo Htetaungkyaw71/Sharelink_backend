@@ -7,7 +7,7 @@ import { createNewUser, deleteUser, getPreview, getUser, signin, updateUser,upda
 import cors from "cors"
 import { validateInput } from "./modules/middleware"
 import { body } from "express-validator"
-
+import config from "./config"
 
 
 
@@ -45,6 +45,6 @@ app.use((err,req,res,next)=>{
     }
 })
 
-app.listen(3001,()=>{
-    console.log("Server is running on http://localhost:3001")
+app.listen(config.port,()=>{
+    console.log(`Server is running on http://localhost:${config.port}`)
 })
