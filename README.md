@@ -8,7 +8,7 @@ Link-Sharing app. Users can create, read, update, delete links, and see previews
 
 ## Getting Started
 ```
-git clone git@github.com:Htetaungkyaw71/Sharelink.git
+git clone git@github.com:Htetaungkyaw71/Sharelink_backend.git
 ```
 ### Screenshot
 ![This is an image](./link.png)
